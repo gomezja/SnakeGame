@@ -13,7 +13,7 @@ public class Food {
 		setRandomLoc();
 	}
 	
-	private void setRandomLoc() {
+	public void setRandomLoc() {
 		Random rand = new Random();
 		
 		posX = rand.nextInt(30) * 30 + 5;
@@ -23,5 +23,13 @@ public class Food {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.white);
 		g.fillRect(posX, posY, 30, 30);
+	}
+	
+	public int getPosX() {
+		return posX;
+	}
+	
+	public int getPosY() {
+		return posY;
 	}
 }
