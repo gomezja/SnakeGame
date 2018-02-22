@@ -9,18 +9,23 @@ public class Snake {
 	private int posX;
 	private int posY;
 	
+	private int growPosX;
+	private int growPosY;
+	
 	private boolean up;
 	private boolean down;
 	private boolean left;
 	private boolean right;
 	
 	private int length;
-	private List snakeLength;
+	private int[][] snakeCell;
 	
 	public Snake() {
-		// initial starting position
-		posX = 14 * 30 + 5;
-		posY = 14 * 30 + 5;
+		// initial starting head position
+		posX = 450 + 15;
+		posY = 450 + 120;
+		
+		
 		
 		up = true;
 		down = false;
@@ -28,13 +33,20 @@ public class Snake {
 		right = false;
 		
 		length = 3;
-		snakeLength = new ArrayList(length);
+		snakeCell = new int[10][10];
+		
+		for(int i = 0; i < length; i++) {
+			snakeCell[i][0] = posX;
+			snakeCell[i][1] = posY + 30 * i;
+		}
 	}
 	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.white);
+		
+		// draw all snake cells
 		for(int i = 0; i < length; i++) {
-			g.fillRect(posX, posY, 30, 30);
+			g.fillRect(snakeCell[i][0], snakeCell[i][1], 30, 30);
 		}
 	}
 	
@@ -47,6 +59,16 @@ public class Snake {
 			posX -= 30;
 		else
 			posX += 30;
+		
+		// move all snake body cells
+		for(int i = length - 1; i > 0; i--) {
+			snakeCell[i][0] = snakeCell[i - 1][0];
+			snakeCell[i][1] = snakeCell[i - 1][1];
+		}
+		
+		// set snake head new location
+		snakeCell[0][0] = posX;
+		snakeCell[0][1] = posY;
 	}
 	
 	public void moveUp() {
@@ -91,9 +113,5 @@ public class Snake {
 	
 	public int getPosY() {
 		return posY;
-	}
-	
-	public void grow() {
-		length++;
 	}
 }

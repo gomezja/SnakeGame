@@ -16,13 +16,13 @@ public class Food {
 	public void setRandomLoc() {
 		Random rand = new Random();
 		
-		posX = rand.nextInt(30) * 30 + 5;
-		posY = rand.nextInt(30) * 30 + 5;
+		posX = rand.nextInt(31) * 30+15;//900;//rand.nextInt(30) * 30; 		// 900 //930+15
+		posY = rand.nextInt(20) * 30 + 120;//rand.nextInt(18) * 30 + 60;	// 600 //600+120
 	}
 	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.white);
-		g.fillRect(posX, posY, 30, 30);
+		g.fillOval(posX, posY, 30, 30);
 	}
 	
 	public int getPosX() {

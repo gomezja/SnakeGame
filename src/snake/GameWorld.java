@@ -1,6 +1,7 @@
 package snake;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -19,6 +20,13 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 	
 	private int points;
 	private boolean play = true;
+	private final int STARTINGSPEED = 200;
+	private int delay = STARTINGSPEED;
+	
+	private int topBoundary = 120; //60
+	private int bottomBoundary = 720; //630
+	private int leftBoundary = 15; //0
+	private int rightBoundary = 945; //930
 	
 	private Timer timer;
 	
@@ -36,29 +44,41 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 		points = 0;
 		
 		// create timer object and start tick
-		timer = new Timer(500, this);
+		timer = new Timer(delay, this);
 		timer.start();
 	}
 	
 	public void paint(Graphics g) {
 		if(play) {
+			
 			g.setColor(Color.black);
-			g.fillRect(0, 0, 915, 950);
+			g.fillRect(0, 0, 1000, 800);
+			
+			g.setColor(Color.white);
+			g.drawRect(15, 15, 960, 90);
+			g.drawRect(15, 120, 960, 630);
+
+			g.setFont(new Font("serif", Font.BOLD, 35));
+			g.drawString(("Score: " + points + " Speed: " + delay), 45, 75);
 			
 			foodItem.draw((Graphics2D)g);
 			snake.draw((Graphics2D)g); 
 		} else {
-			g.setColor(Color.red);
-			g.fillRect(0, 0, 915, 950);
+			g.setColor(Color.black);
+			g.fillRect(237, 250, 500, 400);
+			g.setColor(Color.white);
+			g.drawRect(237, 250, 500, 400);
+			g.setFont(new Font("serif", Font.BOLD, 50));
+			g.drawString(("Game Over!"), 350, 450);
 		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(play) {
+		if(play) {	
 			snake.move();
 			
-			if((snake.getPosX() < 5 || snake.getPosX() > (29 * 30 + 5)) || (snake.getPosY() < 5 || snake.getPosY() > (29 * 30 + 5))) {
+			if((snake.getPosY() < topBoundary || snake.getPosY() > bottomBoundary) || (snake.getPosX() < leftBoundary || snake.getPosX() > rightBoundary)) {
 				play = false;
 			}
 			
@@ -67,8 +87,12 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 			// if player head and food collide
 			if(new Rectangle(snake.getPosX(), snake.getPosY(), 30, 30).intersects(new Rectangle(foodItem.getPosX(), foodItem.getPosY(), 30, 30))) {
 				points++;
-				snake.grow();
 				foodItem.setRandomLoc();
+				
+				if(delay > 100) {
+					delay -= 5;
+					timer.setDelay(delay);
+				}
 			}
 		}	
 	}
@@ -102,6 +126,9 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 			
 			points = 0;
 			play = true;
+			
+			delay = STARTINGSPEED;
+			timer.setDelay(delay);
 			
 			repaint();
 		}

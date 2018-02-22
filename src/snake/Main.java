@@ -10,8 +10,7 @@ public class Main {
 		JFrame screen = new JFrame();
 		GameWorld game = new GameWorld();
 		
-		screen.setBounds(10, 10, 915, 950);
-		//screen.setBackground(Color.black);
+		screen.setBounds(0, 0, 1000, 800);
 		screen.setTitle("Snake Game by Jesus Gomez");
 		screen.setResizable(false);
 		screen.setVisible(true);
@@ -21,3 +20,4 @@ public class Main {
 	}
 
 }
+	
