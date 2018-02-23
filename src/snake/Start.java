@@ -1,10 +1,8 @@
 package snake;
 
-import java.awt.Color;
-
 import javax.swing.JFrame;
 
-public class Main {
+public class Start {
 
 	public static void main(String[] args) {
 		JFrame screen = new JFrame();

@@ -21,6 +21,7 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 	private int points;
 	private boolean play = true;
 	private final int STARTINGSPEED = 200;
+	private final int MAXSPEED = 100;
 	private int delay = STARTINGSPEED;
 	
 	private int topBoundary = 120; //60
@@ -39,7 +40,7 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 		foodItem = new Food();
 		
 		// create Snake object
-		snake = new Snake();
+		snake = new Snake(topBoundary, bottomBoundary, leftBoundary, rightBoundary);
 		
 		points = 0;
 		
@@ -59,15 +60,15 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 			g.drawRect(15, 120, 960, 630);
 
 			g.setFont(new Font("serif", Font.BOLD, 35));
-			g.drawString(("Score: " + points + " Speed: " + delay), 45, 75);
+			g.drawString(("Score: " + points + " Speed: " + delay + " Length: " + snake.getLength()), 45, 75);
 			
 			foodItem.draw((Graphics2D)g);
 			snake.draw((Graphics2D)g); 
 		} else {
-			g.setColor(Color.black);
-			g.fillRect(237, 250, 500, 400);
+			g.setColor(Color.black);/*
+			g.fillRect(237, 250, 500, 400);*/
 			g.setColor(Color.white);
-			g.drawRect(237, 250, 500, 400);
+			//g.drawRect(237, 250, 500, 400);
 			g.setFont(new Font("serif", Font.BOLD, 50));
 			g.drawString(("Game Over!"), 350, 450);
 		}
@@ -78,20 +79,27 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 		if(play) {	
 			snake.move();
 			
-			if((snake.getPosY() < topBoundary || snake.getPosY() > bottomBoundary) || (snake.getPosX() < leftBoundary || snake.getPosX() > rightBoundary)) {
-				play = false;
-			}
+			//if((snake.getPosY() < topBoundary || snake.getPosY() > bottomBoundary) || (snake.getPosX() < leftBoundary || snake.getPosX() > rightBoundary)) {
+			//play = false;
+			//}
 			
 			repaint();
 			
 			// if player head and food collide
 			if(new Rectangle(snake.getPosX(), snake.getPosY(), 30, 30).intersects(new Rectangle(foodItem.getPosX(), foodItem.getPosY(), 30, 30))) {
 				points++;
+				snake.grow();
 				foodItem.setRandomLoc();
 				
-				if(delay > 100) {
-					delay -= 5;
+				if(delay > MAXSPEED) {
+					delay -= 25;
 					timer.setDelay(delay);
+				}
+			}
+			
+			for(int i = 1; i < snake.getLength(); i++) {
+				if(new Rectangle(snake.getPosX(), snake.getPosY(), 30, 30).intersects(new Rectangle(snake.getPosX(i), snake.getPosY(i), 30, 30))) {
+					play = false;
 				}
 			}
 		}	
@@ -122,7 +130,7 @@ public class GameWorld extends JPanel implements ActionListener, KeyListener {
 		// restart game
 		if(e.getKeyCode() == KeyEvent.VK_R) {
 			foodItem = new Food();
-			snake = new Snake();
+			snake = new Snake(topBoundary, bottomBoundary, leftBoundary, rightBoundary);
 			
 			points = 0;
 			play = true;

@@ -22,7 +22,7 @@ public class Food {
 	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.white);
-		g.fillOval(posX, posY, 30, 30);
+		g.drawOval(posX, posY, 30, 30);
 	}
 	
 	public int getPosX() {
